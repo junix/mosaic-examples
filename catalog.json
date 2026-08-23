@@ -1,0 +1,14 @@
+[
+  {"id":"density","use":"large-data density","family":"large-data density","question":"Where do one million points concentrate at screen resolution?","complexity":"advanced","tags":["duckdb","heatmap","million-points"]},
+  {"id":"signals","use":"dense time series","family":"dense time series","question":"How can four long signals remain explorable?","complexity":"advanced","tags":["dense-line","pan-zoom","time"]},
+  {"id":"linked","use":"linked views","family":"linked views","question":"How does a spatial brush filter an hourly profile?","complexity":"advanced","tags":["crossfilter","hexbin","linked"]},
+  {"id":"distribution","use":"distribution","family":"distribution","question":"How do four cohorts differ across a dense measurement distribution?","complexity":"advanced","tags":["density","cohort","sql"]},
+  {"id":"regression","use":"relationship","family":"relationship","question":"What nonlinear relationship remains after dense sampling?","complexity":"advanced","tags":["scatter","regression","million-points"]},
+  {"id":"retention","use":"cohort time","family":"cohort time","question":"How do eight cohorts retain activity over 24 periods?","complexity":"advanced","tags":["line","cohort","retention"]},
+  {"id":"quality-matrix","use":"matrix","family":"matrix","question":"Which phase and subsystem pairs accumulate quality risk?","complexity":"advanced","tags":["cell","matrix","risk"]},
+  {"id":"rankings","use":"comparison","family":"comparison","question":"How do regional scores and uncertainty compare?","complexity":"advanced","tags":["dot","rank","comparison"]},
+  {"id":"anomalies","use":"events","family":"events","question":"Where do rare spikes appear inside a dense signal?","complexity":"advanced","tags":["spike","anomaly","time"]},
+  {"id":"vector-field","use":"vector field","family":"vector field","question":"How does directional flow vary across a sampled grid?","complexity":"advanced","tags":["vector","field","grid"]},
+  {"id":"small-multiples","use":"faceted analysis","family":"faceted analysis","question":"How do the same metrics behave across four services?","complexity":"advanced","tags":["small-multiples","services","comparison"]},
+  {"id":"operations","use":"analytical dashboard","family":"analytical dashboard","question":"How do load, latency, errors, and queue depth align?","complexity":"advanced","tags":["dashboard","linked","operations"]}
+]
