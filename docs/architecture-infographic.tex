@@ -19,6 +19,8 @@
   \setCJKmonofont{FandolFang-Regular}
 }
 \usepackage{xcolor}
+% smallest text size that stays above the 6.5 pt rendered-bbox floor
+\def\fsxs{\fontsize{6.6}{8.4}\selectfont}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,backgrounds,calc,fit,positioning,shapes.geometric}
 \pgfdeclarelayer{edge layer}
@@ -53,7 +55,7 @@
   % stack
   stack item/.style={
     rounded corners=2.2mm,inner sep=2.5mm,align=left,
-    font=\rmfamily\footnotesize,text=Ink,text width=48mm
+    font=\rmfamily\footnotesize,text=Ink,text width=43mm
   },
   stack primary/.style={stack item,draw=Ocean,fill=Ocean,text=white,font=\rmfamily\bfseries\footnotesize},
   stack secondary/.style={stack item,draw=Ocean!35,fill=OceanLight},
@@ -68,7 +70,7 @@
   % pipeline
   pipe node/.style={
     rounded corners=2mm,inner sep=2.5mm,align=center,
-    font=\rmfamily\footnotesize\bfseries,text=Ink,text width=35mm,minimum height=11mm
+    font=\rmfamily\footnotesize\bfseries,text=Ink,text width=31mm,minimum height=11mm
   },
   pipe src/.style={pipe node,draw=Violet,fill=VioletLight,text=Violet!90!black},
   pipe build/.style={pipe node,draw=Ocean,fill=OceanLight,text=Ocean!90!black},
@@ -77,7 +79,7 @@
   % gate
   gate node/.style={
     diamond,draw=Coral,fill=CoralLight,inner sep=1.5mm,
-    font=\rmfamily\scriptsize\bfseries,text=Coral!90!black,align=center,text width=22mm
+    font=\rmfamily\scriptsize\bfseries,text=Coral!90!black,align=center
   },
   % arrows
   primary flow/.style={
@@ -93,7 +95,7 @@
     line width=.85pt,rounded corners=1.5mm,dashed
   },
   edge label/.style={
-    fill=Paper,inner sep=1.5pt,font=\rmfamily\scriptsize,text=Slate
+    fill=Paper,inner sep=1.5pt,font=\rmfamily\scriptsize,text=Slate,align=center
   },
   % metric
   metric/.style={
@@ -126,20 +128,20 @@
 
   % Metrics
   \node[metric,fill=Ocean,anchor=north west] (m1) at (4,-20) {
-    {\Large 12\quad}{\footnotesize 个场景}\\[-1mm]
-    {\tiny\color{white!85}分析问题全覆盖}
+    {\Large 12\quad}{\footnotesize 个场景}\\[.4mm]
+    {\fsxs\color{white!85}分析问题全覆盖}
   };
   \node[metric,fill=Teal,anchor=north west] (m2) at (47,-20) {
-    {\Large 4.06\quad}{\footnotesize M 行}\\[-1mm]
-    {\tiny\color{white!85}总合成数据量}
+    {\Large 4.06\quad}{\footnotesize M 行}\\[.4mm]
+    {\fsxs\color{white!85}总合成数据量}
   };
   \node[metric,fill=Gold,anchor=north west] (m3) at (90,-20) {
-    {\Large 0\quad}{\footnotesize 外部请求}\\[-1mm]
-    {\tiny\color{white!85}完全离线运行}
+    {\Large 0\quad}{\footnotesize 外部请求}\\[.4mm]
+    {\fsxs\color{white!85}完全离线运行}
   };
   \node[metric,fill=Violet,anchor=north west] (m4) at (133,-20) {
-    {\Large 3\quad}{\footnotesize 重验证门}\\[-1mm]
-    {\tiny\color{white!85}透明 / 墨迹 / 饱和}
+    {\Large 3\quad}{\footnotesize 重验证门}\\[.4mm]
+    {\fsxs\color{white!85}透明 / 墨迹 / 饱和}
   };
 
   % ============================================================
@@ -190,13 +192,13 @@
   % Arrows
   \begin{pgfonlayer}{edge layer}
     \draw[data flow] (dl1.east) -- (ml1.west)
-      node[edge label,midway,above=.3mm] {SQL 查询};
+      node[edge label,midway,above=.3mm] {SQL\\查询};
     \draw[data flow] (ml1.east) -- (vl1.west)
-      node[edge label,midway,above=.3mm] {聚合结果};
+      node[edge label,midway,above=.3mm] {聚合\\结果};
     \draw[primary flow] (dl3.east) -- (ml3.west)
       node[edge label,midway,above=.3mm] {连接器};
     \draw[primary flow] (ml3.east) -- (vl3.west)
-      node[edge label,midway,above=.3mm] {API 上下文};
+      node[edge label,midway,above=.3mm] {API\\上下文};
   \end{pgfonlayer}
 
   % Panel 1 bg
@@ -216,68 +218,68 @@
 
   % Row 1
   \node[scene card,fill=Magma!8] (c1) at (4,-125) {
-    {\ttfamily\tiny\bfseries\color{Magma} density}\hfill{\tiny\color{Slate}1,000,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Magma} density}\hfill{\fsxs\color{Slate}1,000,000 行}\\[.5mm]
     {\bfseries\scriptsize 百万点密度热图}\\[.2mm]
     {\scriptsize\color{Slate}屏幕分辨率下，一百万点集中在哪？}
   };
   \node[scene card,fill=Ocean!8] (c2) at (62,-125) {
-    {\ttfamily\tiny\bfseries\color{Ocean} signals}\hfill{\tiny\color{Slate}400,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Ocean} signals}\hfill{\fsxs\color{Slate}400,000 行}\\[.5mm]
     {\bfseries\scriptsize 密集时序信号图集}\\[.2mm]
     {\scriptsize\color{Slate}四条长时序如何保持可探索性？}
   };
   \node[scene card,fill=Teal!8] (c3) at (120,-125) {
-    {\ttfamily\tiny\bfseries\color{Teal} linked}\hfill{\tiny\color{Slate}320,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Teal} linked}\hfill{\fsxs\color{Slate}320,000 行}\\[.5mm]
     {\bfseries\scriptsize 联动操作节律}\\[.2mm]
     {\scriptsize\color{Slate}空间刷选如何过滤小时剖面？}
   };
 
   % Row 2
   \node[scene card,fill=Gold!12] (c4) at (4,-144) {
-    {\ttfamily\tiny\bfseries\color{Gold!70!black} distribution}\hfill{\tiny\color{Slate}360,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Gold!70!black} distribution}\hfill{\fsxs\color{Slate}360,000 行}\\[.5mm]
     {\bfseries\scriptsize 数据库驱动分布对比}\\[.2mm]
     {\scriptsize\color{Slate}四个队列在密集测量上有何差异？}
   };
   \node[scene card,fill=Violet!8] (c5) at (62,-144) {
-    {\ttfamily\tiny\bfseries\color{Violet} regression}\hfill{\tiny\color{Slate}480,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Violet} regression}\hfill{\fsxs\color{Slate}480,000 行}\\[.5mm]
     {\bfseries\scriptsize 密集关系探索}\\[.2mm]
     {\scriptsize\color{Slate}密集采样后还剩什么非线性关系？}
   };
   \node[scene card,fill=Coral!8] (c6) at (120,-144) {
-    {\ttfamily\tiny\bfseries\color{Coral} retention}\hfill{\tiny\color{Slate}320,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Coral} retention}\hfill{\fsxs\color{Slate}320,000 行}\\[.5mm]
     {\bfseries\scriptsize 队列留存图集}\\[.2mm]
     {\scriptsize\color{Slate}八个队列 24 期内如何留存？}
   };
 
   % Row 3
   \node[scene card,fill=Viridian!8] (c7) at (4,-163) {
-    {\ttfamily\tiny\bfseries\color{Viridian} quality-matrix}\hfill{\tiny\color{Slate}280,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Viridian} quality-matrix}\hfill{\fsxs\color{Slate}280,000 行}\\[.5mm]
     {\bfseries\scriptsize 质量风险矩阵}\\[.2mm]
     {\scriptsize\color{Slate}哪些阶段与子系统累积质量风险？}
   };
   \node[scene card,fill=Ocean!8] (c8) at (62,-163) {
-    {\ttfamily\tiny\bfseries\color{Ocean} rankings}\hfill{\tiny\color{Slate}240,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Ocean} rankings}\hfill{\fsxs\color{Slate}240,000 行}\\[.5mm]
     {\bfseries\scriptsize 区域绩效排名}\\[.2mm]
     {\scriptsize\color{Slate}区域评分与不确定性如何比较？}
   };
   \node[scene card,fill=Magma!8] (c9) at (120,-163) {
-    {\ttfamily\tiny\bfseries\color{Magma} anomalies}\hfill{\tiny\color{Slate}420,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Magma} anomalies}\hfill{\fsxs\color{Slate}420,000 行}\\[.5mm]
     {\bfseries\scriptsize 异常事件信号监控}\\[.2mm]
     {\scriptsize\color{Slate}稀疏尖峰如何在密集信号中显现？}
   };
 
   % Row 4
   \node[scene card,fill=Teal!8] (c10) at (4,-182) {
-    {\ttfamily\tiny\bfseries\color{Teal} vector-field}\hfill{\tiny\color{Slate}180,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Teal} vector-field}\hfill{\fsxs\color{Slate}180,000 行}\\[.5mm]
     {\bfseries\scriptsize 采样流场向量}\\[.2mm]
     {\scriptsize\color{Slate}方向流如何随采样网格变化？}
   };
   \node[scene card,fill=Violet!8] (c11) at (62,-182) {
-    {\ttfamily\tiny\bfseries\color{Violet} small-multiples}\hfill{\tiny\color{Slate}360,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Violet} small-multiples}\hfill{\fsxs\color{Slate}360,000 行}\\[.5mm]
     {\bfseries\scriptsize 服务行为小倍数}\\[.2mm]
     {\scriptsize\color{Slate}同指标在四个服务中如何表现？}
   };
   \node[scene card,fill=Gold!12] (c12) at (120,-182) {
-    {\ttfamily\tiny\bfseries\color{Gold!70!black} operations}\hfill{\tiny\color{Slate}520,000 行}\\[.5mm]
+    {\ttfamily\fsxs\bfseries\color{Gold!70!black} operations}\hfill{\fsxs\color{Slate}520,000 行}\\[.5mm]
     {\bfseries\scriptsize 联动运营驾驶舱}\\[.2mm]
     {\scriptsize\color{Slate}负载/延迟/错误/队列如何对齐？}
   };
@@ -293,14 +295,14 @@
     \def\barW{10.5}
     \def\gap{2.7}
     \def\maxH{50}
-    % baseline (top)
+    % baseline (top); bars start 1mm below it so the axis stroke keeps clearance
     \draw[draw=Fog,line width=.6pt] (0,0) -- (158,0);
     % y-axis labels (top to bottom: 1M at top, 0 at bottom)
-    \node[font=\tiny,text=Slate,anchor=east] at (-2, 0) {1M};
-    \node[font=\tiny,text=Slate,anchor=east] at (-2, -25) {500K};
-    \node[font=\tiny,text=Slate,anchor=east] at (-2, -\maxH) {0};
-    \node[font=\tiny,text=Slate,anchor=east,rotate=90] at (-7, -25) {行数};
-    % bars (draw downward: y=0 to y=-h)
+    \node[font=\rmfamily\fsxs,text=Slate,anchor=east] at (-2, -1) {1M};
+    \node[font=\rmfamily\fsxs,text=Slate,anchor=east] at (-2, -26) {500K};
+    \node[font=\rmfamily\fsxs,text=Slate,anchor=east] at (-2, -\maxH-1) {0};
+    \node[font=\rmfamily\fsxs,text=Slate,anchor=east,rotate=90] at (-7, -26) {行数};
+    % bars (draw downward: y=-1 to y=-1-h)
     \foreach \i/\h/\col/\lab in {
       0/50/Magma/density, 1/20/Ocean/signals, 2/16/Teal/linked,
       3/18/Gold/dist, 4/24/Violet/regr, 5/16/Coral/reten,
@@ -309,15 +311,15 @@
     } {
       \pgfmathsetmacro\xpos{\i * (\barW + \gap)}
       \draw[fill=\col!45,draw=\col!60,line width=.4pt,rounded corners=.6mm]
-        (\xpos, 0) rectangle (\xpos + \barW, -\h);
-      \node[font=\ttfamily\tiny,text=Slate,anchor=north,rotate=45,inner sep=.5pt]
-        at (\xpos + \barW/2, -\maxH - 1.5) {\lab};
+        (\xpos, -1) rectangle (\xpos + \barW, -1-\h);
+      \node[font=\ttfamily\fsxs,text=Slate,anchor=north,rotate=45,inner sep=.5pt]
+        at (\xpos + \barW/2, -\maxH - 2.5) {\lab};
     }
   \end{scope}
 
   % Panel 2 bg
   \begin{pgfonlayer}{bg layer}
-    \node[panel bg,fit={(k2.north west) (172,-272)},inner sep=0mm] (p2bg) {};
+    \node[panel bg,fit={(k2.north west) (172,-274)},inner sep=0mm] (p2bg) {};
   \end{pgfonlayer}
 
   % ============================================================
@@ -332,21 +334,22 @@
     \footnotesize\texttt{src/main.ts}\\
     \footnotesize\texttt{catalog.json}
   };
-  \node[pipe build,anchor=north west] (build) at (48,-300) {
+  \node[pipe build,anchor=north west] (build) at (47.5,-300) {
     \textbf{Vite 构建}\\[.6mm]
     \footnotesize\texttt{vite build} $\to$ \texttt{dist/}
   };
-  \node[pipe browser,anchor=north west] (pw) at (92,-300) {
+  \node[pipe browser,anchor=north west] (pw) at (91,-300) {
     \textbf{Playwright 浏览器}\\[.6mm]
     \footnotesize 无头 Chromium + Chrome
   };
-  \node[pipe output,anchor=north west] (out) at (136,-300) {
+  \node[pipe output,anchor=north west] (out) at (134.5,-300) {
     \textbf{透明 PNG 输出}\\[.6mm]
-    \footnotesize\texttt{out/*-transparent.png}
+    \footnotesize\texttt{out/}\\
+    \footnotesize\texttt{*-transparent.png}
   };
 
   % Preview server below build
-  \node[pipe build,anchor=north west,fill=white,draw=Ocean!40,text=Ocean!70!black] (preview) at (48,-316) {
+  \node[pipe build,anchor=north west,fill=white,draw=Ocean!40,text=Ocean!70!black] (preview) at (47.5,-318) {
     \textbf{预览服务器}\\[.6mm]
     \footnotesize\texttt{vite preview :41732}
   };
@@ -354,39 +357,39 @@
   % Arrows (top row)
   \begin{pgfonlayer}{edge layer}
     \draw[primary flow] (src.east) -- (build.west)
-      node[edge label,midway,above=.3mm] {tsc + vite};
+      node[edge label,midway,above=.3mm] {tsc+\\vite};
     \draw[primary flow] (build.east) -- (pw.west)
-      node[edge label,midway,above=.3mm] {静态页面};
+      node[edge label,midway,above=.3mm] {静态\\页面};
     \draw[primary flow] (pw.east) -- (out.west)
       node[edge label,midway,above=.3mm] {截图};
     \draw[data flow] (build.south) -- (preview.north)
-      node[edge label,midway,right=1mm,xshift=.5mm] {serve};
+      node[edge label,pos=0.35,right=1.5mm] {serve};
   \end{pgfonlayer}
 
   % Validation gates
-  \node[panel kicker] (vk) at (4,-334) {三重像素级验证门};
+  \node[panel kicker] (vk) at (4,-330) {三重像素级验证门};
 
-  \node[gate node,anchor=north west] (g1) at (22,-342) {透明度\\校验};
-  \node[gate node,anchor=north west] (g2) at (78,-342) {墨迹像素\\校验};
-  \node[gate node,anchor=north west] (g3) at (134,-342) {色彩饱和\\度校验};
+  \node[gate node,anchor=north west] (g1) at (28.5,-338) {透明度\\校验};
+  \node[gate node,anchor=north west] (g2) at (80.5,-338) {墨迹像素\\校验};
+  \node[gate node,anchor=north west] (g3) at (132.5,-338) {色彩饱和\\度校验};
 
   % Gate descriptions
-  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd1) at (22,-358) {
+  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd1) at (36,-357) {
     透明像素 > 18\%\\确保背景真正透明
   };
-  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd2) at (78,-358) {
+  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd2) at (88,-357) {
     可见像素 > 8,000\\确保图形非空
   };
-  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd3) at (134,-358) {
+  \node[font=\rmfamily\scriptsize,text=Slate,text width=38mm,align=center,anchor=north] (gd3) at (140,-357) {
     饱和像素 > 1,200\\确保彩色数据标记
   };
 
-  % Verify flow arrows (from output down, then to three gates)
+  % Verify flow arrows (from output down to a bus lane, then to three gates)
   \begin{pgfonlayer}{edge layer}
-    \draw[verify flow] (out.south) -- ++(0,-26mm) coordinate (vbranch);
+    \draw[verify flow] (out.south) -- ++(0,-22mm) coordinate (vbranch)
+      node[edge label,midway,right=1.5mm] {PNG 像素分析};
     \draw[verify flow] (vbranch) -| (g1.north);
-    \draw[verify flow] (vbranch) -| (g2.north)
-      node[edge label,pos=0.5,above=.3mm] {PNG 像素分析};
+    \draw[verify flow] (vbranch) -| (g2.north);
     \draw[verify flow] (vbranch) -| (g3.north);
   \end{pgfonlayer}
 
@@ -400,28 +403,28 @@
 
   % Panel 3 bg
   \begin{pgfonlayer}{bg layer}
-    \node[panel bg,fit={(k3.north west) (172,-380)},inner sep=0mm] (p3bg) {};
+    \node[panel bg,fit={(k3.north west) (172,-384)},inner sep=0mm] (p3bg) {};
   \end{pgfonlayer}
 
   % ============================================================
   % FOOTER
   % ============================================================
   \node[anchor=north west,font=\rmfamily\scriptsize,text=Slate,text width=168mm]
-    at (4,-388) {
+    at (4,-392) {
     \textbf{项目路径} \texttt{~/projects/plot/mosaic-examples}
     \,$\cdot$\, \textbf{构建} \texttt{just build}
     \,$\cdot$\, \textbf{渲染} \texttt{just render}
     \,$\cdot$\, \textbf{验证} \texttt{just test}
   };
   \node[anchor=north west,font=\rmfamily\scriptsize,text=Slate,text width=168mm]
-    at (4,-393) {
+    at (4,-397) {
     数据来源：\texttt{catalog.json} \,$\cdot$\, \texttt{src/main.ts} \,$\cdot$\, \texttt{tools/validate.mjs} \,$\cdot$\, \texttt{package.json}
     \,$\mid$\, 生成日期：2026-08-24
   };
 
   % Expand page background to fit
   \begin{pgfonlayer}{bg layer}
-    \fill[Paper] (0,8) rectangle (176,-400);
+    \fill[Paper] (0,8) rectangle (176,-404);
   \end{pgfonlayer}
 
 \end{tikzpicture}
