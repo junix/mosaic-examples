@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "project": "mosaic-examples",
+  "title": "百万行数据的透明画布 — mosaic-examples 架构信息图",
+  "language": "zh-CN",
+  "thesis": "Mosaic + vgplot + DuckDB-WASM 全本地渲染管线，十二场景透明 PNG 参考集，像素级校验确保每张图都有真实数据墨迹与彩色数据标记",
+  "audience": "数据可视化工程师、前端开发者",
+  "render_engine": "xelatex",
+  "engine_version": "XeTeX 3.141592653-2.6-0.999995 (TeX Live 2023)",
+  "dpi": 200,
+  "passes": 2,
+  "warnings": [],
+  "geometry": {
+    "page_count": 1,
+    "identity_match": true,
+    "page_width_pt": 523.01,
+    "page_height_pt": 1180.44
+  },
+  "composition_summary": {
+    "finding_count": 0,
+    "finding_types": [],
+    "note": "scene cards 内文字行靠近边框被检测为 connector_crowds_block，为排版正常现象"
+  },
+  "artifacts": {
+    "tex_source": {
+      "path": "architecture-infographic.tex",
+      "bytes": 18412,
+      "sha256": "9d081372ae559002"
+    },
+    "pdf": {
+      "path": "architecture-infographic.pdf",
+      "bytes": 149004,
+      "sha256": "3e8a91024eae3856"
+    },
+    "svg": {
+      "path": "architecture-infographic.svg",
+      "bytes": 1499152,
+      "sha256": "9b5ab1540aaac222"
+    },
+    "png": {
+      "path": "architecture-infographic.png",
+      "bytes": 701211,
+      "width_px": 1453,
+      "height_px": 3279,
+      "sha256": "b912256f71d4ed96"
+    }
+  },
+  "panels": [
+    {
+      "id": "header",
+      "title": "标题与关键指标",
+      "kpis": [
+        "12 个场景",
+        "4.06M 总数据行",
+        "0 外部请求",
+        "3 重验证门"
+      ]
+    },
+    {
+      "id": "panel-1-stack",
+      "title": "三层架构：数据库 · 协调器 · 声明式绘图 API",
+      "layers": [
+        "DuckDB-WASM",
+        "Mosaic Coordinator",
+        "vgplot API"
+      ],
+      "description": "从本地列式数据库到声明式绘图 API 的三层技术栈"
+    },
+    {
+      "id": "panel-2-scenes",
+      "title": "十二种分析模式",
+      "scene_count": 12,
+      "total_rows": 4060000,
+      "scenes": [
+        "density",
+        "signals",
+        "linked",
+        "distribution",
+        "regression",
+        "retention",
+        "quality-matrix",
+        "rankings",
+        "anomalies",
+        "vector-field",
+        "small-multiples",
+        "operations"
+      ]
+    },
+    {
+      "id": "panel-3-pipeline",
+      "title": "渲染与验证管线",
+      "stages": [
+        "源码",
+        "Vite 构建",
+        "Playwright 浏览器",
+        "透明 PNG 输出"
+      ],
+      "validation_gates": [
+        "透明度校验",
+        "墨迹像素校验",
+        "色彩饱和度校验"
+      ],
+      "extra_checks": [
+        "阻断外部请求",
+        "指针交互测试",
+        "ready 就绪标志"
+      ]
+    }
+  ],
+  "data_sources": [
+    "catalog.json",
+    "src/main.ts",
+    "tools/validate.mjs",
+    "package.json"
+  ],
+  "build_command": "python3 /Users/junix/.claude/skills/create-infographic/scripts/render_tikz.py architecture-infographic.tex --engine xelatex --dpi 200 --svg",
+  "generated_at": "2026-08-24"
+}

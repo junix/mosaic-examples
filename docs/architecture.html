@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mosaic-examples 架构文档</title>
+<style>
+  :root {
+    --bg: #fafbfc;
+    --fg: #1a202c;
+    --fg-soft: #4a5568;
+    --muted: #718096;
+    --border: #e2e8f0;
+    --card: #ffffff;
+    --accent: #2b6cb0;
+    --accent-soft: #ebf4ff;
+    --accent-2: #2f855a;
+    --accent-2-soft: #f0fff4;
+    --accent-3: #b7791f;
+    --accent-3-soft: #fffaf0;
+    --accent-4: #9f7aea;
+    --accent-4-soft: #faf5ff;
+    --danger: #c53030;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #ebf4ff 0%, #f0fff4 50%, #faf5ff 100%);
+    padding: 64px 0 56px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--fg-soft);
+    margin-bottom: 28px;
+    max-width: 680px;
+  }
+  .hero .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--fg-soft);
+  }
+
+  /* Sections */
+  section { padding: 48px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    color: var(--fg);
+  }
+  h2 .num {
+    display: inline-block;
+    width: 36px; height: 36px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 8px;
+    text-align: center; line-height: 36px;
+    font-size: 18px; font-weight: 700;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+  .section-intro {
+    color: var(--fg-soft);
+    margin-bottom: 28px;
+    font-size: 16px;
+  }
+
+  /* Feature grid */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .feature {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .feature-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .feature h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .feature p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Diagram container */
+  .diagram-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    margin: 24px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .diagram-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .diagram {
+    width: 100%;
+    height: 360px;
+    position: relative;
+  }
+  .diagram svg { width: 100%; height: 100%; display: block; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--fg-soft);
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  /* Prose */
+  .prose {
+    max-width: 780px;
+    margin: 0 auto;
+    color: var(--fg-soft);
+    font-size: 15px;
+  }
+  .prose p { margin-bottom: 14px; }
+  .prose strong { color: var(--fg); font-weight: 600; }
+  .prose code {
+    background: var(--accent-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: "SF Mono", Consolas, Monaco, monospace;
+    color: var(--accent);
+  }
+
+  /* Walkthrough steps */
+  .walkthrough {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    box-shadow: var(--shadow);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .step.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-lg);
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .step.active .step-num {
+    background: var(--accent);
+    color: #fff;
+  }
+  .step h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Scene grid */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .scene-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 14px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .scene-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .scene-card .name {
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 4px;
+  }
+  .scene-card .desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .scene-card .rows {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Stack list */
+  .stack-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .stack-list li {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  .stack-list li .stack-name {
+    font-weight: 600;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .stack-list li .stack-role {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Footer */
+  footer {
+    padding: 32px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin: 28px 0;
+    box-shadow: var(--shadow);
+  }
+  .toc h3 { margin-top: 0; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Diagram node styles (svg) */
+  .node-rect {
+    rx: 8;
+    ry: 8;
+    stroke-width: 1.5;
+    transition: all 0.5s ease;
+  }
+  .node-text {
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--fg);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .node-sub {
+    font-size: 11px;
+    fill: var(--muted);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .flow-arrow {
+    stroke: var(--muted);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-dasharray: 6 4;
+  }
+  .flow-arrow.animate {
+    animation: dash 1.5s linear infinite;
+  }
+  @keyframes dash {
+    to { stroke-dashoffset: -20; }
+  }
+  .flow-arrow-head {
+    fill: var(--muted);
+  }
+  .pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Scene dots for catalog diagram */
+  .scene-dot {
+    transition: r 0.3s, fill 0.3s;
+    cursor: pointer;
+  }
+  .scene-dot:hover { r: 10; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .flow-arrow.animate { animation: none; stroke-dasharray: none; }
+    .pulse { animation: none; }
+    .feature:hover { transform: none; }
+    .scene-card:hover { transform: none; }
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .hero { background: #fff; padding: 20px 0; border: none; }
+    .hero h1 { font-size: 24px; }
+    section { padding: 20px 0; }
+    h2 { font-size: 18px; }
+    .diagram-wrap { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; padding: 12px; }
+    .diagram { height: 280px; }
+    .feature, .step, .scene-card, .stack-list li { box-shadow: none; break-inside: avoid; }
+    .toc { display: none; }
+    footer { border: none; }
+  }
+
+  /* No-JS fallback message is hidden when JS works; shown when it doesn't */
+  .no-js-note {
+    background: var(--accent-3-soft);
+    border: 1px solid #f6e05e;
+    color: #744210;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: block;
+  }
+  .js-enabled .no-js-note { display: none; }
+</style>
+</head>
+<body>
+<div class="no-js-note">
+  <strong>提示：</strong> 当前浏览器未启用 JavaScript。架构图中的交互动画已降级为静态视图，核心文字内容完整可读。
+</div>
+
+<script>document.body.classList.add('js-enabled');</script>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <h1>mosaic-examples 架构文档</h1>
+    <p class="subtitle">
+      一套基于 <strong>Mosaic / vgplot</strong> 与 <strong>DuckDB-WASM</strong> 的纯本地大规模数据可视化示例集。
+      全部数据由 SQL 在浏览器内合成，十二种分析场景覆盖密度图、时序、联动视图、分布、回归、留存、矩阵、排名、异常、向量场、分面与驾驶舱。
+    </p>
+    <div class="badges">
+      <span class="badge">12 个场景</span>
+      <span class="badge">纯本地运行</span>
+      <span class="badge">零外部请求</span>
+      <span class="badge">透明 PNG 产物</span>
+      <span class="badge">TypeScript</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>目录</h3>
+    <ol>
+      <li><a href="#intro">产品简介与核心特性</a></li>
+      <li><a href="#arch-overview">系统总览架构图</a></li>
+      <li><a href="#data-pipeline">数据生成与渲染流水线</a></li>
+      <li><a href="#walkthrough">主走查：导出密度图</a></li>
+      <li><a href="#validation">验证与测试体系</a></li>
+      <li><a href="#scenes">场景目录</a></li>
+      <li><a href="#tech-stack">技术栈明细</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. 产品简介 -->
+  <section id="intro">
+    <h2><span class="num">1</span>产品简介与核心特性</h2>
+    <p class="section-intro">
+      <strong>mosaic-examples</strong> 是一个演示性质的前端项目，用于展示在浏览器中直接运行分析型数据库（DuckDB-WASM）并驱动声明式可视化（Mosaic / vgplot）的能力。
+      它不是单一应用，而是一个可切换场景的「画廊」——每个场景都是一个独立的分析问题，配有确定性合成数据和对应的可视化表达。
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-soft);">🦆</div>
+        <h4>数据库驱动可视化</h4>
+        <p>数据存储、聚合、筛选全部在 DuckDB-WASM 中完成，vgplot 只向数据库请求像素级所需的聚合结果，避免百万行数据进入 DOM。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-2-soft);">🔒</div>
+        <h4>零外部网络请求</h4>
+        <p>验证器拦截所有非本地请求并报错。数据由 SQL 的 <code>range()</code> 与三角函数合成，完全离线可用。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-3-soft);">🖼️</div>
+        <h4>透明 PNG 参考图</h4>
+        <p>每个场景都可导出背景透明的 PNG，作为文档、幻灯片或设计稿中的可复用素材。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-4-soft);">🔗</div>
+        <h4>Crossfilter 联动</h4>
+        <p>多个视图通过共享 SQL 选择集联动：刷选散点图，直方图实时过滤。状态保存在 Coordinator 层。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-soft);">🧪</div>
+        <h4>自动化像素级验证</h4>
+        <p>用 Playwright 驱动 Chromium 逐场景截图，再用 pngjs 分析透明像素占比、墨迹量与饱和度，确保渲染结果有效。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:var(--accent-2-soft);">📊</div>
+        <h4>十二种分析模板</h4>
+        <p>从密度热图到运营驾驶舱，覆盖常见的大规模数据分析场景。每个场景都是自包含的 SQL + 绘图声明。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 系统总览 -->
+  <section id="arch-overview">
+    <h2><span class="num">2</span>系统总览架构图</h2>
+    <p class="section-intro">
+      系统由<strong>浏览器运行时</strong>与<strong>构建/验证工具链</strong>两大部分组成。浏览器端是一个单页应用，根据 URL 参数加载不同场景；
+      工具链负责 TypeScript 编译、Vite 打包、以及基于 Playwright 的截图验证。
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">系统分层总览</div>
+      <div class="diagram" id="diag-overview">
+        <svg viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="flow-arrow-head"/>
+            </marker>
+          </defs>
+
+          <!-- Layer: Browser Runtime -->
+          <rect x="20" y="20" width="860" height="220" rx="12" ry="12" fill="#f7fafc" stroke="#cbd5e0" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="40" y="44" style="font-size:12px;fill:#718096;font-weight:600;letter-spacing:1px;">浏览器运行时 (Browser Runtime)</text>
+
+          <!-- Scene Router -->
+          <rect class="node-rect" x="60" y="70" width="140" height="60" fill="#ebf4ff" stroke="#2b6cb0" id="node-router"/>
+          <text class="node-text" x="130" y="92">场景路由</text>
+          <text class="node-sub" x="130" y="112">URL ?scene=</text>
+
+          <!-- Shell UI -->
+          <rect class="node-rect" x="60" y="160" width="140" height="60" fill="#f0fff4" stroke="#2f855a" id="node-shell"/>
+          <text class="node-text" x="130" y="182">外壳 UI</text>
+          <text class="node-sub" x="130" y="202">header + 导航</text>
+
+          <!-- vgplot API Context -->
+          <rect class="node-rect" x="260" y="70" width="160" height="60" fill="#faf5ff" stroke="#9f7aea" id="node-vgplot"/>
+          <text class="node-text" x="340" y="92">vgplot API</text>
+          <text class="node-sub" x="340" y="112">声明式绘图 DSL</text>
+
+          <!-- Coordinator -->
+          <rect class="node-rect" x="260" y="160" width="160" height="60" fill="#fffaf0" stroke="#b7791f" id="node-coord"/>
+          <text class="node-text" x="340" y="182">Coordinator</text>
+          <text class="node-sub" x="340" y="202">缓存 + 调度 + 联动</text>
+
+          <!-- DuckDB-WASM -->
+          <rect class="node-rect" x="480" y="100" width="170" height="90" fill="#fed7d7" stroke="#c53030" id="node-duckdb"/>
+          <text class="node-text" x="565" y="132">DuckDB-WASM</text>
+          <text class="node-sub" x="565" y="152">Web Worker 中运行</text>
+          <text class="node-sub" x="565" y="170">MVP / EH 双 bundle</text>
+
+          <!-- Chart Output -->
+          <rect class="node-rect" x="720" y="100" width="140" height="90" fill="#e6fffa" stroke="#2c7a7b" id="node-chart"/>
+          <text class="node-text" x="790" y="132">图表渲染</text>
+          <text class="node-sub" x="790" y="152">SVG / Canvas</text>
+          <text class="node-sub" x="790" y="170">交互 & 刷选</text>
+
+          <!-- Arrows inside browser -->
+          <path class="flow-arrow animate" d="M 200 100 L 258 100" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow animate" d="M 200 190 L 258 190" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow animate" d="M 340 130 L 340 158" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow animate" d="M 420 165 L 478 155" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow animate" d="M 650 145 L 718 145" marker-end="url(#arrow1)"/>
+
+          <!-- Layer: Build & Validate -->
+          <rect x="20" y="270" width="860" height="70" rx="12" ry="12" fill="#faf5ff" stroke="#d6bcfa" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="40" y="294" style="font-size:12px;fill:#718096;font-weight:600;letter-spacing:1px;">构建 &amp; 验证 (Node.js)</text>
+
+          <rect class="node-rect" x="60" y="300" width="120" height="30" fill="#fff" stroke="#cbd5e0" id="node-vite"/>
+          <text class="node-text" x="120" y="318" style="font-size:12px;">Vite 构建</text>
+
+          <rect class="node-rect" x="220" y="300" width="140" height="30" fill="#fff" stroke="#cbd5e0" id="node-validate"/>
+          <text class="node-text" x="290" y="318" style="font-size:12px;">validate.mjs</text>
+
+          <rect class="node-rect" x="400" y="300" width="140" height="30" fill="#fff" stroke="#cbd5e0" id="node-pw"/>
+          <text class="node-text" x="470" y="318" style="font-size:12px;">Playwright</text>
+
+          <rect class="node-rect" x="580" y="300" width="120" height="30" fill="#fff" stroke="#cbd5e0" id="node-png"/>
+          <text class="node-text" x="640" y="318" style="font-size:12px;">pngjs</text>
+
+          <rect class="node-rect" x="740" y="300" width="120" height="30" fill="#fff" stroke="#cbd5e0" id="node-out"/>
+          <text class="node-text" x="800" y="318" style="font-size:12px;">out/*.png</text>
+
+          <path class="flow-arrow" d="M 180 315 L 218 315" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow" d="M 360 315 L 398 315" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow" d="M 540 315 L 578 315" marker-end="url(#arrow1)"/>
+          <path class="flow-arrow" d="M 700 315 L 738 315" marker-end="url(#arrow1)"/>
+
+          <!-- Vertical connector from preview server -->
+          <path class="flow-arrow" d="M 120 278 L 120 268 L 790 268 L 790 250" stroke="#9f7aea" stroke-dasharray="4 3" marker-end="url(#arrow1)"/>
+          <text x="450" y="265" style="font-size:11px;fill:#9f7aea;text-anchor:middle;">vite preview (HTTP)</text>
+        </svg>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ebf4ff;border:1.5px solid #2b6cb0;"></div>路由 / 外壳</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#faf5ff;border:1.5px solid #9f7aea;"></div>vgplot 层</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fffaf0;border:1.5px solid #b7791f;"></div>Coordinator</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fed7d7;border:1.5px solid #c53030;"></div>DuckDB-WASM</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e6fffa;border:1.5px solid #2c7a7b;"></div>渲染输出</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>架构解读</h3>
+      <p>
+        <strong>浏览器运行时</strong>是用户直接交互的部分。入口文件 <code>main.ts</code> 读取 URL 参数中的 <code>scene</code>，
+        动态组装对应的 SQL 建表语句与 vgplot 声明。<strong>场景路由</strong>决定执行哪一个 <code>if</code> 分支，
+        <strong>外壳 UI</strong> 负责标题、副标题、导航链接和状态条。
+      </p>
+      <p>
+        <strong>vgplot</strong>（来自 <code>@uwdata/vgplot</code>）是 Mosaic 框架的声明式绘图 API。
+        它不直接绘图，而是把绘图需求翻译为<strong>数据查询</strong>，交给下层的 <strong>Coordinator</strong> 调度。
+        Coordinator 负责缓存、合并查询、以及跨视图的 <code>crossfilter</code> 联动状态。
+      </p>
+      <p>
+        <strong>DuckDB-WASM</strong> 在单独的 Web Worker 中运行，执行实际的 SQL 计算。
+        项目同时打包了 MVP（最小可行产品）和 EH（异常处理）两个 WASM bundle，运行时由浏览器能力自动选择。
+        由于数据全部在 Worker 内合成与查询，主线程只接收聚合结果，因此百万行数据也能流畅交互。
+      </p>
+      <p>
+        <strong>构建与验证层</strong>运行在 Node.js 环境中。<code>vite build</code> 打包静态资源，
+        <code>validate.mjs</code> 启动 <code>vite preview</code> 服务器，用 Playwright 驱动 Chromium 逐场景访问，
+        截图后交给 <code>pngjs</code> 做像素级分析，最终产出 <code>out/</code> 目录下的透明 PNG 参考图。
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. 数据流水线 -->
+  <section id="data-pipeline">
+    <h2><span class="num">3</span>数据生成与渲染流水线</h2>
+    <p class="section-intro">
+      每个场景的运行都遵循相同的五步流水线：初始化引擎、合成数据、构建查询、渲染图表、响应用户交互。
+      以下架构图以数据流的方式展示了各模块之间的调用顺序。
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">数据与渲染流水线</div>
+      <div class="diagram" id="diag-pipeline">
+        <svg viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="flow-arrow-head"/>
+            </marker>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ebf4ff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#bee3f8;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+
+          <!-- 5 stages in a pipeline flow -->
+          <!-- Stage 1: Init DB -->
+          <g id="pstage-1">
+            <rect class="node-rect pulse" x="30" y="130" width="150" height="100" fill="#ebf4ff" stroke="#2b6cb0"/>
+            <text class="node-text" x="105" y="162">① 初始化引擎</text>
+            <text class="node-sub" x="105" y="184">selectBundle()</text>
+            <text class="node-sub" x="105" y="202">Worker + WASM</text>
+            <text class="node-sub" x="105" y="220">AsyncDuckDB</text>
+          </g>
+
+          <!-- Stage 2: Create table -->
+          <g id="pstage-2">
+            <rect class="node-rect" x="210" y="130" width="150" height="100" fill="#fffaf0" stroke="#b7791f"/>
+            <text class="node-text" x="285" y="162">② 合成数据表</text>
+            <text class="node-sub" x="285" y="184">CREATE TABLE ...</text>
+            <text class="node-sub" x="285" y="202">range() + 三角函数</text>
+            <text class="node-sub" x="285" y="220">18~52 万行</text>
+          </g>
+
+          <!-- Stage 3: Coordinator builds query -->
+          <g id="pstage-3">
+            <rect class="node-rect" x="390" y="130" width="150" height="100" fill="#faf5ff" stroke="#9f7aea"/>
+            <text class="node-text" x="465" y="162">③ 声明可视化</text>
+            <text class="node-sub" x="465" y="184">vgplot DSL</text>
+            <text class="node-sub" x="465" y="202">Coordinator 翻译</text>
+            <text class="node-sub" x="465" y="220">缓存 + 合并</text>
+          </g>
+
+          <!-- Stage 4: Query execution -->
+          <g id="pstage-4">
+            <rect class="node-rect" x="570" y="130" width="150" height="100" fill="#fed7d7" stroke="#c53030"/>
+            <text class="node-text" x="645" y="162">④ 数据库聚合</text>
+            <text class="node-sub" x="645" y="184">DuckDB-WASM</text>
+            <text class="node-sub" x="645" y="202">SQL 聚合/分箱</text>
+            <text class="node-sub" x="645" y="220">返回像素级数据</text>
+          </g>
+
+          <!-- Stage 5: Render -->
+          <g id="pstage-5">
+            <rect class="node-rect" x="750" y="130" width="120" height="100" fill="#e6fffa" stroke="#2c7a7b"/>
+            <text class="node-text" x="810" y="162">⑤ 渲染交互</text>
+            <text class="node-sub" x="810" y="184">SVG / Canvas</text>
+            <text class="node-sub" x="810" y="202">pan/zoom/brush</text>
+            <text class="node-sub" x="810" y="220">__mosaicDemo</text>
+          </g>
+
+          <!-- Horizontal flow arrows -->
+          <path class="flow-arrow animate" d="M 180 180 L 208 180" marker-end="url(#arrow2)"/>
+          <path class="flow-arrow animate" d="M 360 180 L 388 180" marker-end="url(#arrow2)"/>
+          <path class="flow-arrow animate" d="M 540 180 L 568 180" marker-end="url(#arrow2)"/>
+          <path class="flow-arrow animate" d="M 720 180 L 748 180" marker-end="url(#arrow2)"/>
+
+          <!-- Interaction feedback loop (dashed, from ⑤ back to ③) -->
+          <path class="flow-arrow" d="M 810 250 L 810 290 L 465 290 L 465 232"
+                stroke="#9f7aea" stroke-width="2" stroke-dasharray="4 3"
+                marker-end="url(#arrow2)" id="feedback-loop"/>
+          <text x="635" y="283" style="font-size:11px;fill:#9f7aea;text-anchor:middle;">交互 → 重新查询 → 重绘</text>
+
+          <!-- Label row on top -->
+          <text x="450" y="60" style="font-size:14px;fill:#4a5568;text-anchor:middle;font-weight:600;">
+            单次场景加载的数据流
+          </text>
+          <text x="450" y="82" style="font-size:12px;fill:#718096;text-anchor:middle;">
+            初始化仅在首次访问时执行，后续切换场景复用数据库连接
+          </text>
+
+          <!-- Bottom status bar -->
+          <rect x="30" y="320" width="840" height="28" rx="6" ry="6" fill="#f7fafc" stroke="#e2e8f0"/>
+          <text x="50" y="338" style="font-size:12px;fill:#4a5568;">
+            状态: <tspan id="pipeline-status" style="font-weight:600;fill:#2b6cb0;">initializing</tspan>
+            <tspan style="fill:#a0aec0;margin-left:16px;">→</tspan>
+            <tspan style="margin-left:16px;">building local table</tspan>
+            <tspan style="fill:#a0aec0;margin-left:16px;">→</tspan>
+            <tspan style="margin-left:16px;">N rows ready</tspan>
+          </text>
+        </svg>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ebf4ff;border:1.5px solid #2b6cb0;"></div>引擎初始化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fffaf0;border:1.5px solid #b7791f;"></div>数据合成</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#faf5ff;border:1.5px solid #9f7aea;"></div>可视化声明</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fed7d7;border:1.5px solid #c53030;"></div>数据库计算</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e6fffa;border:1.5px solid #2c7a7b;"></div>渲染输出</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>流水线详解</h3>
+      <p>
+        <strong>第一步：初始化引擎。</strong>调用 <code>duckdb.selectBundle()</code> 在 MVP 与 EH 两个 WASM bundle 中选择当前浏览器支持的版本，
+        创建 Worker 并实例化 <code>AsyncDuckDB</code>。这一步只在页面首次加载时发生，切换场景不会重建数据库。
+      </p>
+      <p>
+        <strong>第二步：合成数据表。</strong>每个场景对应一条 <code>CREATE TABLE ... AS SELECT ... FROM range(N)</code> 语句。
+        利用 DuckDB 的 <code>range()</code> 表函数生成指定行数（18 万到 52 万不等）的序列，再通过三角函数与模运算组合出确定性的合成数据。
+        由于数据完全由公式决定，每次运行的结果完全一致，方便做像素级回归测试。
+      </p>
+      <p>
+        <strong>第三步：声明可视化。</strong>开发者用 vgplot 的声明式 API 描述图表类型（heatmap、denseLine、hexbin、barY、cell、dot、spike、vector 等）、
+        坐标轴、颜色方案与交互方式（panZoom、intervalXY、crossfilter）。Coordinator 接收这些声明，将其翻译为对数据库的具体查询，
+        并启用查询缓存（<code>cache: true</code>）与结果合并（<code>consolidate: true</code>）以减少往返。
+      </p>
+      <p>
+        <strong>第四步：数据库聚合。</strong>实际的分箱、计数、平均等运算都在 DuckDB-WASM 中完成。
+        例如密度图场景中，Mosaic 不会把一百万行点全部发给浏览器渲染，而是请求数据库按像素尺度分箱后返回二维直方图数据，
+        数据量从百万级降到约屏幕像素数（约十万分之一）。
+      </p>
+      <p>
+        <strong>第五步：渲染与交互。</strong>vgplot 将聚合结果渲染为 SVG 或 Canvas 图形。用户进行缩放、刷选等操作时，
+        交互事件反馈给 Coordinator，Coordinator 修改查询参数后重新执行第三、四、五步，形成闭环。
+        全局对象 <code>window.__mosaicDemo</code> 暴露 <code>ready</code>、<code>scene</code>、<code>rows</code>、<code>interactions</code> 等状态，
+        供验证脚本读取。
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. 主走查 -->
+  <section id="walkthrough">
+    <h2><span class="num">4</span>主走查：导出密度图</h2>
+    <p class="section-intro">
+      选取<strong>「导出密度图」</strong>这一真实的端到端场景（命令：<code>npm run render</code>），
+      从用户敲下命令开始，到透明 PNG 落盘结束，逐步追踪整个系统的运转路径。
+    </p>
+
+    <div class="walkthrough" id="walkthrough-steps">
+      <div class="step active" data-step="1">
+        <div class="step-num">1</div>
+        <h4>启动验证器</h4>
+        <p>Node.js 执行 validate.mjs，启动 vite preview 服务器在端口 41732。</p>
+      </div>
+      <div class="step" data-step="2">
+        <div class="step-num">2</div>
+        <h4>驱动浏览器</h4>
+        <p>Playwright 启动 Chromium 无头模式，打开 ?scene=density&export=1。</p>
+      </div>
+      <div class="step" data-step="3">
+        <div class="step-num">3</div>
+        <h4>等待就绪</h4>
+        <p>页面加载，DuckDB-WASM 建表，渲染完成后置 window.__mosaicDemo.ready = true。</p>
+      </div>
+      <div class="step" data-step="4">
+        <div class="step-num">4</div>
+        <h4>截图落盘</h4>
+        <p>page.screenshot(omitBackground: true) 生成透明背景 PNG，写入 out/ 目录。</p>
+      </div>
+      <div class="step" data-step="5">
+        <div class="step-num">5</div>
+        <h4>像素校验</h4>
+        <p>pngjs 逐像素分析：透明区占比、墨迹量、饱和度，三项均达标才算通过。</p>
+      </div>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">导出密度图走查 · 时序视图</div>
+      <div class="diagram" id="diag-walkthrough">
+        <svg viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="flow-arrow-head"/>
+            </marker>
+          </defs>
+
+          <!-- Swimlanes -->
+          <rect x="30" y="40" width="840" height="50" rx="4" fill="#f7fafc" stroke="#e2e8f0"/>
+          <text x="50" y="70" style="font-size:13px;font-weight:600;fill:#4a5568;">Node.js (validate.mjs)</text>
+
+          <rect x="30" y="100" width="840" height="50" rx="4" fill="#f0fff4" stroke="#c6f6d5"/>
+          <text x="50" y="130" style="font-size:13px;font-weight:600;fill:#2f855a;">Chromium (Playwright)</text>
+
+          <rect x="30" y="160" width="840" height="50" rx="4" fill="#ebf4ff" stroke="#bee3f8"/>
+          <text x="50" y="190" style="font-size:13px;font-weight:600;fill:#2b6cb0;">Vite Preview Server</text>
+
+          <rect x="30" y="220" width="840" height="50" rx="4" fill="#fed7d7" stroke="#feb2b2"/>
+          <text x="50" y="250" style="font-size:13px;font-weight:600;fill:#c53030;">DuckDB-WASM (Worker)</text>
+
+          <rect x="30" y="280" width="840" height="50" rx="4" fill="#faf5ff" stroke="#d6bcfa"/>
+          <text x="50" y="310" style="font-size:13px;font-weight:600;fill:#6b46c1;">文件系统 (out/)</text>
+
+          <!-- Steps as numbered circles on swimlanes -->
+          <!-- Step 1: Node.js starts -->
+          <g id="wt-1">
+            <circle cx="150" cy="65" r="16" fill="#fff" stroke="#2b6cb0" stroke-width="2" class="pulse"/>
+            <text x="150" y="70" style="font-size:12px;font-weight:700;fill:#2b6cb0;text-anchor:middle;">1</text>
+          </g>
+
+          <!-- Step 2: Node launches playwright/chromium -->
+          <g id="wt-2">
+            <circle cx="280" cy="125" r="16" fill="#fff" stroke="#2f855a" stroke-width="2"/>
+            <text x="280" y="130" style="font-size:12px;font-weight:700;fill:#2f855a;text-anchor:middle;">2</text>
+          </g>
+          <path class="flow-arrow" d="M 166 65 L 264 125" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+
+          <!-- Step 3: HTTP request to vite -->
+          <g id="wt-3a">
+            <circle cx="410" cy="185" r="16" fill="#fff" stroke="#2b6cb0" stroke-width="2"/>
+            <text x="410" y="190" style="font-size:12px;font-weight:700;fill:#2b6cb0;text-anchor:middle;">3a</text>
+          </g>
+          <path class="flow-arrow" d="M 296 125 L 394 185" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+
+          <!-- Step 3b: DuckDB builds table -->
+          <g id="wt-3b">
+            <circle cx="540" cy="245" r="16" fill="#fff" stroke="#c53030" stroke-width="2"/>
+            <text x="540" y="250" style="font-size:12px;font-weight:700;fill:#c53030;text-anchor:middle;">3b</text>
+          </g>
+          <path class="flow-arrow" d="M 426 195 L 524 245" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+
+          <!-- Step 4: Screenshot -->
+          <g id="wt-4">
+            <circle cx="670" cy="125" r="16" fill="#fff" stroke="#2f855a" stroke-width="2"/>
+            <text x="670" y="130" style="font-size:12px;font-weight:700;fill:#2f855a;text-anchor:middle;">4</text>
+          </g>
+          <path class="flow-arrow" d="M 556 245 L 654 135" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+
+          <!-- Step 5: Write file + validate -->
+          <g id="wt-5">
+            <circle cx="800" cy="305" r="16" fill="#fff" stroke="#6b46c1" stroke-width="2"/>
+            <text x="800" y="310" style="font-size:12px;font-weight:700;fill:#6b46c1;text-anchor:middle;">5</text>
+          </g>
+          <path class="flow-arrow" d="M 686 135 L 784 300" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+
+          <!-- Step labels above/below -->
+          <text x="150" y="38" style="font-size:11px;fill:#718096;text-anchor:middle;">启动服务器</text>
+          <text x="280" y="98" style="font-size:11px;fill:#718096;text-anchor:middle;">打开页面</text>
+          <text x="410" y="158" style="font-size:11px;fill:#718096;text-anchor:middle;">请求资源</text>
+          <text x="540" y="218" style="font-size:11px;fill:#718096;text-anchor:middle;">建表+聚合</text>
+          <text x="670" y="98" style="font-size:11px;fill:#718096;text-anchor:middle;">截图</text>
+          <text x="800" y="278" style="font-size:11px;fill:#718096;text-anchor:middle;">写入+校验</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>走查解读</h3>
+      <p>
+        <strong>第 1 步：启动验证器。</strong>用户运行 <code>npm run render</code>，Node.js 执行 <code>tools/validate.mjs</code>。
+        脚本首先以子进程方式启动 <code>vite preview</code>，监听 127.0.0.1:41732，轮询直到服务器返回 HTTP 200。
+      </p>
+      <p>
+        <strong>第 2 步：驱动浏览器。</strong>Playwright 启动系统安装的 Google Chrome 无头模式，
+        为每个场景新建一个页面。页面请求被拦截器路由：仅允许 <code>127.0.0.1</code>、<code>blob:</code>、<code>data:</code>，
+        任何外部域名请求都会被记录为失败并中止——这保证了「纯本地运行」的承诺。
+      </p>
+      <p>
+        <strong>第 3 步：等待就绪。</strong>页面加载 <code>index.html</code>，Vite 提供打包后的 <code>main.ts</code>。
+        主线程创建 DuckDB-WASM Worker，执行 <code>CREATE TABLE points AS SELECT ...</code> 合成一百万行点数据，
+        vgplot 渲染密度热图。全部完成后，<code>window.__mosaicDemo.ready</code> 被置为 <code>true</code>，
+        Playwright 的 <code>waitForFunction</code> 检测到后继续。
+      </p>
+      <p>
+        <strong>第 4 步：截图落盘。</strong>在 <code>export=1</code> 模式下，页面外壳隐藏（仅保留图表），
+        <code>page.screenshot({omitBackground: true})</code> 生成透明背景的 PNG，写入 <code>out/density-transparent.png</code>。
+      </p>
+      <p>
+        <strong>第 5 步：像素校验。</strong><code>pngjs</code> 读取 PNG 并逐像素分析：透明像素需 &gt; 18%（确保背景透明）、
+        墨迹像素（alpha &gt; 32）需 &gt; 8000（确保有实质内容）、饱和像素需 &gt; 1200（确保彩色数据可见）。
+        三项均通过，场景才算渲染成功。
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. 验证与测试体系 -->
+  <section id="validation">
+    <h2><span class="num">5</span>验证与测试体系</h2>
+    <p class="section-intro">
+      项目的测试不依赖断言库，而是围绕「真实渲染 + 像素分析 + 交互验证」构建了三层保障，
+      确保每个场景既能正常绘制、又能响应用户操作、且不依赖任何外部资源。
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">验证体系三层结构</div>
+      <div class="diagram" id="diag-validation">
+        <svg viewBox="0 0 900 360" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="flow-arrow-head"/>
+            </marker>
+          </defs>
+
+          <!-- 3 layers as concentric? No, horizontal layers -->
+          <!-- Layer 1: Type check -->
+          <g id="val-layer-1">
+            <rect class="node-rect" x="50" y="40" width="250" height="280" fill="#ebf4ff" stroke="#2b6cb0" stroke-width="2"/>
+            <text x="175" y="70" style="font-size:15px;font-weight:700;fill:#2b6cb0;text-anchor:middle;">第一层 · 静态检查</text>
+            <text x="175" y="92" style="font-size:11px;fill:#718096;text-anchor:middle;">TypeScript 编译期</text>
+
+            <rect x="70" y="110" width="210" height="50" rx="6" fill="#fff" stroke="#bee3f8"/>
+            <text x="175" y="132" style="font-size:13px;font-weight:600;fill:#2b6cb0;text-anchor:middle;">tsc --noEmit</text>
+            <text x="175" y="150" style="font-size:11px;fill:#718096;text-anchor:middle;">类型安全校验</text>
+
+            <rect x="70" y="175" width="210" height="50" rx="6" fill="#fff" stroke="#bee3f8"/>
+            <text x="175" y="197" style="font-size:13px;font-weight:600;fill:#2b6cb0;text-anchor:middle;">vite build</text>
+            <text x="175" y="215" style="font-size:11px;fill:#718096;text-anchor:middle;">打包产物验证</text>
+
+            <rect x="70" y="240" width="210" height="50" rx="6" fill="#fff" stroke="#bee3f8"/>
+            <text x="175" y="262" style="font-size:13px;font-weight:600;fill:#2b6cb0;text-anchor:middle;">catalog.json</text>
+            <text x="175" y="280" style="font-size:11px;fill:#718096;text-anchor:middle;">场景目录 ≥ 12 个</text>
+          </g>
+
+          <!-- Layer 2: Render check -->
+          <g id="val-layer-2">
+            <rect class="node-rect" x="330" y="40" width="250" height="280" fill="#f0fff4" stroke="#2f855a" stroke-width="2"/>
+            <text x="455" y="70" style="font-size:15px;font-weight:700;fill:#2f855a;text-anchor:middle;">第二层 · 渲染检查</text>
+            <text x="455" y="92" style="font-size:11px;fill:#718096;text-anchor:middle;">像素级视觉验证</text>
+
+            <rect x="350" y="110" width="210" height="50" rx="6" fill="#fff" stroke="#c6f6d5"/>
+            <text x="455" y="132" style="font-size:13px;font-weight:600;fill:#2f855a;text-anchor:middle;">透明像素占比</text>
+            <text x="455" y="150" style="font-size:11px;fill:#718096;text-anchor:middle;">&gt; 18% 透明像素</text>
+
+            <rect x="350" y="175" width="210" height="50" rx="6" fill="#fff" stroke="#c6f6d5"/>
+            <text x="455" y="197" style="font-size:13px;font-weight:600;fill:#2f855a;text-anchor:middle;">墨迹总量</text>
+            <text x="455" y="215" style="font-size:11px;fill:#718096;text-anchor:middle;">&gt; 8000 可见像素</text>
+
+            <rect x="350" y="240" width="210" height="50" rx="6" fill="#fff" stroke="#c6f6d5"/>
+            <text x="455" y="262" style="font-size:13px;font-weight:600;fill:#2f855a;text-anchor:middle;">彩色饱和度</text>
+            <text x="455" y="280" style="font-size:11px;fill:#718096;text-anchor:middle;">&gt; 1200 饱和像素</text>
+          </g>
+
+          <!-- Layer 3: Interaction check -->
+          <g id="val-layer-3">
+            <rect class="node-rect" x="610" y="40" width="250" height="280" fill="#faf5ff" stroke="#9f7aea" stroke-width="2"/>
+            <text x="735" y="70" style="font-size:15px;font-weight:700;fill:#6b46c1;text-anchor:middle;">第三层 · 交互检查</text>
+            <text x="735" y="92" style="font-size:11px;fill:#718096;text-anchor:middle;">运行时行为验证</text>
+
+            <rect x="630" y="110" width="210" height="50" rx="6" fill="#fff" stroke="#d6bcfa"/>
+            <text x="735" y="132" style="font-size:13px;font-weight:600;fill:#6b46c1;text-anchor:middle;">无外部请求</text>
+            <text x="735" y="150" style="font-size:11px;fill:#718096;text-anchor:middle;">拦截器审计所有流量</text>
+
+            <rect x="630" y="175" width="210" height="50" rx="6" fill="#fff" stroke="#d6bcfa"/>
+            <text x="735" y="197" style="font-size:13px;font-weight:600;fill:#6b46c1;text-anchor:middle;">指针交互</text>
+            <text x="735" y="215" style="font-size:11px;fill:#718096;text-anchor:middle;">mouse drag 触发 interactions++</text>
+
+            <rect x="630" y="240" width="210" height="50" rx="6" fill="#fff" stroke="#d6bcfa"/>
+            <text x="735" y="262" style="font-size:13px;font-weight:600;fill:#6b46c1;text-anchor:middle;">控制台零错误</text>
+            <text x="735" y="280" style="font-size:11px;fill:#718096;text-anchor:middle;">console.error + pageerror</text>
+          </g>
+
+          <!-- arrows between layers -->
+          <path class="flow-arrow animate" d="M 300 180 L 328 180" marker-end="url(#arrow4)"/>
+          <path class="flow-arrow animate" d="M 580 180 L 608 180" marker-end="url(#arrow4)"/>
+
+          <!-- bottom label -->
+          <text x="450" y="345" style="font-size:12px;fill:#718096;text-anchor:middle;">
+            <tspan style="font-weight:600;">验证顺序：</tspan>先过静态检查 → 再验证渲染结果 → 最后确认交互行为
+          </text>
+        </svg>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ebf4ff;border:1.5px solid #2b6cb0;"></div>静态检查</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f0fff4;border:1.5px solid #2f855a;"></div>渲染检查</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#faf5ff;border:1.5px solid #9f7aea;"></div>交互检查</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>验证体系解读</h3>
+      <p>
+        <strong>第一层：静态检查。</strong>运行 <code>npm test</code> 时，先执行 <code>tsc --noEmit</code> 做类型检查，
+        再执行 <code>vite build</code> 确保打包无错。验证器启动时还会读取 <code>catalog.json</code> 并断言场景数 ≥ 12，
+        防止场景列表意外缩减。
+      </p>
+      <p>
+        <strong>第二层：渲染检查。</strong>这是项目最有特色的验证方式——不用 DOM 断言，而是直接分析 PNG 的像素分布。
+        三项指标各有侧重：<strong>透明像素占比</strong>确保背景确实是透明的（而不是画了白色矩形），
+        <strong>墨迹总量</strong>确保图表有实质内容（而不是空白或加载失败），
+        <strong>彩色饱和度</strong>确保数据是彩色绘制的（而不是全灰或单色）。
+      </p>
+      <p>
+        <strong>第三层：交互检查。</strong>非 <code>--render-only</code> 模式下还会做两件事：
+        一是用 <code>page.route</code> 拦截所有请求并审计来源，任何非本地请求都算失败；
+        二是在图表区域模拟鼠标拖拽（按下 → 移动 → 抬起），
+        然后断言 <code>window.__mosaicDemo.interactions &gt; 0</code>，确认 pointer 事件确实触发了图表的交互逻辑。
+        同时全程监控 <code>console.error</code> 和 <code>pageerror</code>，任何报错都计入失败。
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. 场景目录 -->
+  <section id="scenes">
+    <h2><span class="num">6</span>场景目录</h2>
+    <p class="section-intro">
+      项目包含 12 个分析场景，每个场景都是一个独立的 SQL 建表语句 + 一组 vgplot 声明。
+      场景通过 <code>?scene=&lt;id&gt;</code> URL 参数切换，所有数据均为确定性合成。
+    </p>
+
+    <div class="scene-grid">
+      <div class="scene-card">
+        <div class="name">density</div>
+        <div class="desc">百万点密度热图，按像素尺度分箱聚合</div>
+        <div class="rows">1,000,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">signals</div>
+        <div class="desc">四条密集时序信号，支持平移缩放</div>
+        <div class="rows">400,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">linked</div>
+        <div class="desc">散点 + 柱状联动，crossfilter 刷选</div>
+        <div class="rows">320,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">distribution</div>
+        <div class="desc">四队列密度分布对比</div>
+        <div class="rows">360,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">regression</div>
+        <div class="desc">六边形分箱 + 回归拟合曲线</div>
+        <div class="rows">480,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">retention</div>
+        <div class="desc">八队列留存率时序对比</div>
+        <div class="rows">320,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">quality-matrix</div>
+        <div class="desc">子系统 × 生命周期质量风险矩阵</div>
+        <div class="rows">280,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">rankings</div>
+        <div class="desc">区域排名点状对比图</div>
+        <div class="rows">240,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">anomalies</div>
+        <div class="desc">密集信号 + 异常尖峰叠加</div>
+        <div class="rows">420,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">vector-field</div>
+        <div class="desc">采样流场向量，幅度感知字形</div>
+        <div class="rows">180,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">small-multiples</div>
+        <div class="desc">四服务指标分面小图</div>
+        <div class="rows">360,000 行</div>
+      </div>
+      <div class="scene-card">
+        <div class="name">operations</div>
+        <div class="desc">联动运营驾驶舱：负载 + 延迟 + 事件</div>
+        <div class="rows">520,000 行</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px;">
+      <p>
+        <strong>场景间的数据共享策略：</strong>前三个场景（density / signals / linked）各有独立的表结构（<code>points</code>、<code>signals</code>、<code>events</code>），
+        其余九个场景复用同一张 <code>measures</code> 大表，只是选择不同的列与聚合方式。这一设计减少了重复的 SQL 模板，
+        也体现了 Mosaic 的核心思想——同一份数据可以支撑多种分析视角。
+      </p>
+      <p>
+        <strong>所有数据均为确定性合成</strong>，使用 <code>sin</code>、<code>cos</code>、<code>%</code> 等纯函数组合生成，
+        无需任何外部数据源。这一设计使得项目可以完全离线运行，也让像素级回归测试有了稳定的基准。
+      </p>
+    </div>
+  </section>
+
+  <!-- 7. 技术栈 -->
+  <section id="tech-stack">
+    <h2><span class="num">7</span>技术栈明细</h2>
+    <p class="section-intro">
+      项目依赖数量极少（仅 2 个运行时依赖），大部分复杂度来自 DuckDB-WASM 与 vgplot 的深度集成。
+    </p>
+
+    <h3>运行时依赖</h3>
+    <ul class="stack-list">
+      <li>
+        <span class="stack-name">@duckdb/duckdb-wasm 1.33.1-dev57.0</span>
+        <span class="stack-role">浏览器内分析型数据库，Web Worker + WASM 双 bundle</span>
+      </li>
+      <li>
+        <span class="stack-name">@uwdata/vgplot 0.30.0</span>
+        <span class="stack-role">Mosaic 框架的声明式可视化 API，含 Coordinator 调度</span>
+      </li>
+    </ul>
+
+    <h3>开发依赖</h3>
+    <ul class="stack-list">
+      <li>
+        <span class="stack-name">vite 8.2.2</span>
+        <span class="stack-role">构建工具与开发 / 预览服务器</span>
+      </li>
+      <li>
+        <span class="stack-name">typescript 5.9.3</span>
+        <span class="stack-role">类型系统与编译检查</span>
+      </li>
+      <li>
+        <span class="stack-name">playwright-core 1.62.1</span>
+        <span class="stack-role">无头浏览器自动化，驱动截图与交互测试</span>
+      </li>
+      <li>
+        <span class="stack-name">pngjs 7.0.0</span>
+        <span class="stack-role">PNG 解码与逐像素分析</span>
+      </li>
+      <li>
+        <span class="stack-name">@types/node 26.0.0</span>
+        <span class="stack-role">Node.js 类型定义</span>
+      </li>
+      <li>
+        <span class="stack-name">@types/pngjs 6.0.5</span>
+        <span class="stack-role">pngjs 类型定义</span>
+      </li>
+    </ul>
+
+    <div class="prose" style="margin-top:28px;">
+      <h3>设计取舍</h3>
+      <p>
+        <strong>为什么用 DuckDB-WASM 而不是直接数组？</strong>因为可视化的数据量达到几十万到上百万行，
+        如果全部加载到 JavaScript 主线程再用 D3 之类的库渲染，会有严重的性能问题。
+        数据库驱动的方式让聚合在 Worker 内完成，主线程只接收屏幕分辨率级别的结果，交互更流畅。
+      </p>
+      <p>
+        <strong>为什么是透明 PNG 而不是嵌入页面的 SVG？</strong>透明 PNG 可以直接用于幻灯片、文档、设计稿等多种媒介，
+        不需要考虑样式隔离或字体差异。<code>omitBackground: true</code> 使得图像可以叠加在任意背景上。
+      </p>
+      <p>
+        <strong>为什么用像素分析而不是快照对比？</strong>像素比对（snapshot diff）对渲染细节过于敏感，
+        字体渲染、抗锯齿的微小差异都会导致误报。而「透明区 + 墨迹量 + 饱和度」的三项指标是结构级别的，
+        既能捕获实质性错误（空白图、全黑图、无颜色），又对无害的渲染波动有鲁棒性。
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>mosaic-examples · 架构文档 · 纯前端 + DuckDB-WASM 大规模可视化示例集</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // Respect reduced motion
+  var motionOk = !window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Pipeline animation: cycle through stages
+  var stages = ['initializing', 'building local table', 'aggregating in DuckDB', 'rendering chart', '1,000,000 rows ready'];
+  var stageIdx = 0;
+  var statusEl = document.getElementById('pipeline-status');
+  var pstages = [1, 2, 3, 4, 5].map(function(n) { return document.getElementById('pstage-' + n); });
+
+  function highlightPipeline() {
+    if (!motionOk || !statusEl) return;
+    // Update status text
+    statusEl.textContent = stages[stageIdx];
+    // Highlight current stage
+    pstages.forEach(function(el, i) {
+      if (!el) return;
+      var rect = el.querySelector('rect');
+      if (i === stageIdx) {
+        rect.classList.add('pulse');
+        rect.setAttribute('stroke-width', '3');
+      } else {
+        rect.classList.remove('pulse');
+        rect.setAttribute('stroke-width', '1.5');
+      }
+    });
+    stageIdx = (stageIdx + 1) % stages.length;
+  }
+
+  if (motionOk && statusEl) {
+    setInterval(highlightPipeline, 1800);
+    highlightPipeline();
+  }
+
+  // Walkthrough step cycling
+  var walkSteps = document.querySelectorAll('#walkthrough-steps .step');
+  var wtStep = 0;
+  function cycleWalkthrough() {
+    if (!motionOk || walkSteps.length === 0) return;
+    walkSteps.forEach(function(el, i) {
+      if (i === wtStep) el.classList.add('active');
+      else el.classList.remove('active');
+    });
+    wtStep = (wtStep + 1) % walkSteps.length;
+  }
+
+  if (motionOk && walkSteps.length > 0) {
+    setInterval(cycleWalkthrough, 2000);
+  }
+
+  // Diagram hover interactions: pulse on hover
+  var diagramRects = document.querySelectorAll('.diagram rect.node-rect');
+  diagramRects.forEach(function(rect) {
+    rect.addEventListener('mouseenter', function() {
+      if (!motionOk) return;
+      rect.classList.add('pulse');
+    });
+    rect.addEventListener('mouseleave', function() {
+      rect.classList.remove('pulse');
+    });
+  });
+
+  // Smooth scroll for TOC (handled by CSS scroll-behavior but ensure for older browsers)
+  var tocLinks = document.querySelectorAll('.toc a');
+  tocLinks.forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var href = a.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        var target = document.querySelector(href);
+        if (target && target.scrollIntoView) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: motionOk ? 'smooth' : 'auto', block: 'start' });
+        }
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
