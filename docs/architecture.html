@@ -372,7 +372,7 @@
     stroke-dasharray: 6 4;
   }
   .flow-arrow.animate {
-    animation: dash 1.5s linear infinite;
+    animation: dash 1.5s linear 3;
   }
   @keyframes dash {
     to { stroke-dashoffset: -20; }
@@ -381,7 +381,7 @@
     fill: var(--muted);
   }
   .pulse {
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse 2s ease-in-out 3;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; }
@@ -695,7 +695,7 @@
   <strong>提示：</strong> 当前浏览器未启用 JavaScript。架构图中的交互动画已降级为静态视图，核心文字内容完整可读。
 </div>
 
-<script>document.body.classList.add('js-enabled');</script>
+<script data-doc-motion-extension>document.body.classList.add('js-enabled');</script>
 
 <!-- Hero -->
 <div class="hero">
@@ -1100,8 +1100,8 @@
           <!-- Steps as numbered circles on swimlanes -->
           <!-- Step 1: Node.js starts -->
           <g id="wt-1">
-            <circle cx="150" cy="65" r="16" fill="#fff" stroke="#2b6cb0" stroke-width="2" class="pulse"/>
-            <text x="150" y="70" style="font-size:12px;font-weight:700;fill:#2b6cb0;text-anchor:middle;">1</text>
+            <circle cx="250" cy="65" r="16" fill="#fff" stroke="#2b6cb0" stroke-width="2" class="pulse"/>
+            <text x="250" y="70" style="font-size:12px;font-weight:700;fill:#2b6cb0;text-anchor:middle;">1</text>
           </g>
 
           <!-- Step 2: Node launches playwright/chromium -->
@@ -1109,7 +1109,7 @@
             <circle cx="280" cy="125" r="16" fill="#fff" stroke="#2f855a" stroke-width="2"/>
             <text x="280" y="130" style="font-size:12px;font-weight:700;fill:#2f855a;text-anchor:middle;">2</text>
           </g>
-          <path class="flow-arrow" d="M 166 65 L 264 125" marker-end="url(#arrow3)" stroke="#a0aec0"/>
+          <path class="flow-arrow" d="M 266 65 L 264 125" marker-end="url(#arrow3)" stroke="#a0aec0"/>
 
           <!-- Step 3: HTTP request to vite -->
           <g id="wt-3a">
@@ -1140,7 +1140,7 @@
           <path class="flow-arrow" d="M 686 135 L 784 300" marker-end="url(#arrow3)" stroke="#a0aec0"/>
 
           <!-- Step labels above/below -->
-          <text x="150" y="38" style="font-size:11px;fill:#718096;text-anchor:middle;">启动服务器</text>
+          <text x="250" y="38" style="font-size:11px;fill:#718096;text-anchor:middle;">启动服务器</text>
           <text x="280" y="98" style="font-size:11px;fill:#718096;text-anchor:middle;">打开页面</text>
           <text x="410" y="158" style="font-size:11px;fill:#718096;text-anchor:middle;">请求资源</text>
           <text x="540" y="218" style="font-size:11px;fill:#718096;text-anchor:middle;">建表+聚合</text>
@@ -1453,7 +1453,7 @@
   </div>
 </footer>
 
-<script>
+<script data-doc-motion-extension>
 (function() {
   'use strict';
 
