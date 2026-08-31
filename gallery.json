@@ -1,0 +1,9 @@
+{
+  "title": "mosaic-demos",
+  "library": "Mosaic · DuckDB-WASM",
+  "tagline": "Database-backed plots built on Mosaic, vgplot and a fully local DuckDB-WASM bundle — twelve transparent PNGs, with the browser views as an optional interactive companion.",
+  "rebuild": "just build",
+  "backdrop": "light",
+  "code_search": "src/main.ts",
+  "code_guard": "scene\\s*===\\s*'{id}'"
+}

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mosaic-demos — gallery</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#fff; --ink:#16181d; --muted:#5f6570; --faint:#8b929e;
+  --line:#e3e1dc; --accent:#2f6f5e; --chip:#eef1ef; --code:#f6f5f2;
+  --shadow:0 1px 2px rgba(20,22,26,.05),0 8px 24px -12px rgba(20,22,26,.18);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#0f1114; --panel:#161a1f; --ink:#e8eaee; --muted:#a2abb8; --faint:#727d8c;
+  --line:#262c34; --accent:#6fd3b0; --chip:#1d232a; --code:#12161a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+}}
+:root[data-theme=dark]{
+  --bg:#0f1114; --panel:#161a1f; --ink:#e8eaee; --muted:#a2abb8; --faint:#727d8c;
+  --line:#262c34; --accent:#6fd3b0; --chip:#1d232a; --code:#12161a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:56px 28px 96px}
+header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+h1{margin:0;font-size:30px;letter-spacing:-.02em;font-weight:650}
+.tagline{margin:10px 0 0;color:var(--muted);max-width:70ch;font-size:16px}
+.meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 11px}
+.pill b{color:var(--ink);font-weight:600}
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.shot{margin:0;padding:16px;display:flex;flex-direction:column;gap:10px;
+  align-items:center;justify-content:center;height:250px;border-bottom:1px solid var(--line)}
+.shot.tall{height:400px}
+.shot.checker{background-color:#f2f1ee;background-image:
+  linear-gradient(45deg,#e2e0dc 25%,transparent 25%,transparent 75%,#e2e0dc 75%),
+  linear-gradient(45deg,#e2e0dc 25%,transparent 25%,transparent 75%,#e2e0dc 75%);
+  background-size:16px 16px;background-position:0 0,8px 8px}
+.shot.dark{background:#11151a}
+.shot.light{background:#fff}
+.shot img,.shot video{max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;display:block;border-radius:3px}
+.shot.multi img{max-height:calc(50% - 5px)}
+.shot .missing{color:var(--faint);font-size:13px;font-style:italic;text-align:center}
+.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.idx{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--faint);
+  letter-spacing:.09em;text-transform:uppercase}
+h2{margin:0;font-size:17px;font-weight:620;letter-spacing:-.01em}
+.blurb{margin:0;color:var(--muted);font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+  background:var(--chip);border-radius:5px;padding:4px 7px}
+details{margin-top:auto;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--accent);list-style:none;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+pre{margin:12px 0 0;background:var(--code);border:1px solid var(--line);border-radius:8px;
+  padding:14px;overflow-x:auto;font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+  max-height:440px;overflow-y:auto}
+pre .c{color:var(--faint);font-style:italic}
+pre .s{color:var(--accent)}
+pre .n{color:#b1784f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) pre .n{color:#d8a06a}}
+:root[data-theme=dark] pre .n{color:#d8a06a}
+.extra{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--faint)}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
+  color:var(--faint);font-size:13px}
+footer code{background:var(--chip);border-radius:4px;padding:2px 6px;
+  font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>mosaic-demos</h1>
+    <p class="tagline">Database-backed plots built on Mosaic, vgplot and a fully local DuckDB-WASM bundle — twelve transparent PNGs, with the browser views as an optional interactive companion.</p>
+    <div class="meta"><span class="pill">Mosaic · DuckDB-WASM</span><span class="pill"><b>12</b> demos</span><span class="pill"><b>12</b> rendered</span></div>
+  </header>
+  <main class="grid">
+      <article class="card">
+        <figure class="shot light"><img src="out/density-transparent.png" alt="Density" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">01 · large-data density</div>
+          <h2>Density</h2>
+          <p class="blurb">Where do one million points concentrate at screen resolution?</p>
+          <div class="tags"><span class="tag">duckdb</span><span class="tag">heatmap</span><span class="tag">million-points</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>  if (scene === <span class="s">&#x27;density&#x27;</span>) {
+    await coordinator.exec(`
+      CREATE TABLE points AS
+      SELECT
+        i,
+        <span class="n">43</span> * sin(i * <span class="n">0.017</span>) + <span class="n">19</span> * sin(i * <span class="n">0.00031</span>) + ((i % <span class="n">97</span>) / <span class="n">97.0</span> - <span class="n">0.5</span>) * <span class="n">13</span> AS x,
+        <span class="n">31</span> * cos(i * <span class="n">0.013</span>) + <span class="n">16</span> * sin(i * <span class="n">0.00047</span>) + ((i % <span class="n">61</span>) / <span class="n">61.0</span> - <span class="n">0.5</span>) * <span class="n">11</span> AS y,
+        CASE WHEN i % <span class="n">4</span> = <span class="n">0</span> THEN <span class="s">&#x27;north&#x27;</span> WHEN i % <span class="n">4</span> = <span class="n">1</span> THEN <span class="s">&#x27;east&#x27;</span> WHEN i % <span class="n">4</span> = <span class="n">2</span> THEN <span class="s">&#x27;south&#x27;</span> ELSE <span class="s">&#x27;west&#x27;</span> END AS cohort
+      FROM range(${meta.rows}) AS t(i)
+    `);
+    chart.replaceChildren(vg.plot(
+      vg.heatmap(vg.from(<span class="s">&#x27;points&#x27;</span>), {x: <span class="s">&#x27;x&#x27;</span>, y: <span class="s">&#x27;y&#x27;</span>, bandwidth: <span class="n">10</span>, pixelSize: <span class="n">1</span>}),
+      vg.intervalXY({as: vg.Selection.crossfilter()}),
+      vg.colorScheme(<span class="s">&#x27;magma&#x27;</span>), vg.colorLegend(), vg.width(<span class="n">1120</span>), vg.height(<span class="n">610</span>),
+      vg.marginLeft(<span class="n">62</span>), vg.marginBottom(<span class="n">50</span>), vg.xLabel(<span class="s">&#x27;latent dimension α&#x27;</span>), vg.yLabel(<span class="s">&#x27;latent dimension β&#x27;</span>)
+    ));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/signals-transparent.png" alt="Signals" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">02 · dense time series</div>
+          <h2>Signals</h2>
+          <p class="blurb">How can four long signals remain explorable?</p>
+          <div class="tags"><span class="tag">dense-line</span><span class="tag">pan-zoom</span><span class="tag">time</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>  } else if (scene === <span class="s">&#x27;signals&#x27;</span>) {
+    await coordinator.exec(`
+      CREATE TABLE signals AS
+      SELECT
+        i % <span class="n">100000</span> AS t,
+        CAST(floor(i / <span class="n">100000</span>) AS INTEGER) AS series,
+        sin((i % <span class="n">100000</span>) * (<span class="n">0.0007</span> + floor(i / <span class="n">100000</span>) * <span class="n">0.00019</span>))
+          + <span class="n">0.34</span> * cos((i % <span class="n">100000</span>) * <span class="n">0.0051</span>)
+          + <span class="n">0.12</span> * sin(i * <span class="n">0.071</span>) AS value
+      FROM range(${meta.rows}) AS s(i)
+    `);
+    chart.replaceChildren(vg.plot(
+      vg.denseLine(vg.from(<span class="s">&#x27;signals&#x27;</span>), {x: <span class="s">&#x27;t&#x27;</span>, y: <span class="s">&#x27;value&#x27;</span>, z: <span class="s">&#x27;series&#x27;</span>}),
+      vg.panZoomX(), vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>), vg.colorLegend(),
+      vg.width(<span class="n">1120</span>), vg.height(<span class="n">610</span>), vg.marginLeft(<span class="n">62</span>), vg.marginBottom(<span class="n">50</span>),
+      vg.xLabel(<span class="s">&#x27;sample index&#x27;</span>), vg.yLabel(<span class="s">&#x27;signal amplitude&#x27;</span>), vg.yGrid(true)
+    ));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/linked-transparent.png" alt="Linked" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">03 · linked views</div>
+          <h2>Linked</h2>
+          <p class="blurb">How does a spatial brush filter an hourly profile?</p>
+          <div class="tags"><span class="tag">crossfilter</span><span class="tag">hexbin</span><span class="tag">linked</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>  } else if (scene === <span class="s">&#x27;linked&#x27;</span>) {
+    await coordinator.exec(`
+      CREATE TABLE events AS
+      SELECT
+        i,
+        <span class="n">24</span> * ((i % <span class="n">1440</span>) / <span class="n">1440.0</span>) AS hour,
+        <span class="n">46</span> + <span class="n">25</span> * sin((i % <span class="n">1440</span>) / <span class="n">1440.0</span> * <span class="n">2</span> * pi()) + <span class="n">12</span> * cos(i * <span class="n">0.017</span>) + (i % <span class="n">29</span>) / <span class="n">5.0</span> AS latency,
+        CASE WHEN i % <span class="n">3</span> = <span class="n">0</span> THEN <span class="s">&#x27;api&#x27;</span> WHEN i % <span class="n">3</span> = <span class="n">1</span> THEN <span class="s">&#x27;worker&#x27;</span> ELSE <span class="s">&#x27;storage&#x27;</span> END AS service
+      FROM range(${meta.rows}) AS e(i)
+    `);
+    const select = vg.Selection.crossfilter();
+    const points = vg.plot(
+      vg.hexbin(vg.from(<span class="s">&#x27;events&#x27;</span>), {x: <span class="s">&#x27;hour&#x27;</span>, y: <span class="s">&#x27;latency&#x27;</span>, fill: vg.count(), binWidth: <span class="n">13</span>}),
+      vg.intervalXY({as: select}), vg.colorScheme(<span class="s">&#x27;viridis&#x27;</span>),
+      vg.width(<span class="n">1120</span>), vg.height(<span class="n">395</span>), vg.marginLeft(<span class="n">62</span>), vg.xLabel(<span class="s">&#x27;hour of day&#x27;</span>), vg.yLabel(<span class="s">&#x27;latency (ms)&#x27;</span>)
+    );
+    const profile = vg.plot(
+      vg.barY(vg.from(<span class="s">&#x27;events&#x27;</span>, {filterBy: select}), {x: vg.bin(<span class="s">&#x27;hour&#x27;</span>), y: vg.count(), fill: <span class="s">&#x27;#b14c6c&#x27;</span>}),
+      vg.width(<span class="n">1120</span>), vg.height(<span class="n">205</span>), vg.marginLeft(<span class="n">62</span>), vg.marginBottom(<span class="n">44</span>),
+      vg.xLabel(<span class="s">&#x27;selected hourly profile&#x27;</span>), vg.yLabel(<span class="s">&#x27;events&#x27;</span>), vg.yGrid(true)
+    );
+    chart.replaceChildren(vg.vconcat(points, profile));
+  } else {
+    await coordinator.exec(`
+      CREATE TABLE measures AS
+      SELECT i,
+        CAST(i % <span class="n">96</span> AS INTEGER) AS period,
+        CAST(floor(i / <span class="n">96</span>) % <span class="n">8</span> AS INTEGER) AS cohort,
+        CAST(floor(i / <span class="n">768</span>) % <span class="n">6</span> AS INTEGER) AS subsystem,
+        <span class="n">42</span> + <span class="n">18</span> * sin(i * <span class="n">0.017</span>) + <span class="n">11</span> * cos(i * <span class="n">0.0043</span>) + (i % <span class="n">31</span>) / <span class="n">3.0</span> AS value,
+        <span class="n">18</span> + <span class="n">0.72</span> * (<span class="n">42</span> + <span class="n">18</span> * sin(i * <span class="n">0.017</span>)) + <span class="n">9</span> * sin(i * <span class="n">0.031</span>) AS metric,
+        sin((i % <span class="n">96</span>) / <span class="n">96.0</span> * <span class="n">2</span> * pi()) AS vx,
+        cos((i % <span class="n">96</span>) / <span class="n">96.0</span> * <span class="n">2</span> * pi()) AS vy
+      FROM range(${meta.rows}) AS m(i)
+    `);
+    const source=vg.from(<span class="s">&#x27;measures&#x27;</span>);
+    const wide={width:<span class="n">1120</span>,height:<span class="n">610</span>,marginLeft:<span class="n">72</span>,marginBottom:<span class="n">54</span>};
+    let view:any;
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/distribution-transparent.png" alt="Distribution" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">04 · distribution</div>
+          <h2>Distribution</h2>
+          <p class="blurb">How do four cohorts differ across a dense measurement distribution?</p>
+          <div class="tags"><span class="tag">density</span><span class="tag">cohort</span><span class="tag">sql</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    if(scene===<span class="s">&#x27;distribution&#x27;</span>)view=vg.plot(vg.densityY(source,{x:<span class="s">&#x27;value&#x27;</span>,fill:<span class="s">&#x27;cohort&#x27;</span>,fillOpacity:.<span class="n">32</span>,stroke:<span class="s">&#x27;cohort&#x27;</span>}),vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>),vg.colorLegend(),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(wide.marginLeft),vg.xLabel(<span class="s">&#x27;measurement&#x27;</span>),vg.yLabel(<span class="s">&#x27;density&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/regression-transparent.png" alt="Regression" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">05 · relationship</div>
+          <h2>Regression</h2>
+          <p class="blurb">What nonlinear relationship remains after dense sampling?</p>
+          <div class="tags"><span class="tag">scatter</span><span class="tag">regression</span><span class="tag">million-points</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;regression&#x27;</span>)view=vg.plot(vg.hexbin(source,{x:<span class="s">&#x27;value&#x27;</span>,y:<span class="s">&#x27;metric&#x27;</span>,fill:vg.count(),binWidth:<span class="n">11</span>}),vg.regressionY(source,{x:<span class="s">&#x27;value&#x27;</span>,y:<span class="s">&#x27;metric&#x27;</span>,stroke:<span class="s">&#x27;#ff6f91&#x27;</span>,strokeWidth:<span class="n">3</span>}),vg.colorScheme(<span class="s">&#x27;viridis&#x27;</span>),vg.colorLegend(),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">68</span>),vg.xLabel(<span class="s">&#x27;input metric&#x27;</span>),vg.yLabel(<span class="s">&#x27;response&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/retention-transparent.png" alt="Retention" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">06 · cohort time</div>
+          <h2>Retention</h2>
+          <p class="blurb">How do eight cohorts retain activity over 24 periods?</p>
+          <div class="tags"><span class="tag">line</span><span class="tag">cohort</span><span class="tag">retention</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;retention&#x27;</span>)view=vg.plot(vg.lineY(source,{x:<span class="s">&#x27;period&#x27;</span>,y:vg.avg(<span class="s">&#x27;value&#x27;</span>),z:<span class="s">&#x27;cohort&#x27;</span>,stroke:<span class="s">&#x27;cohort&#x27;</span>,strokeWidth:<span class="n">2</span>}),vg.dot(source,{x:<span class="s">&#x27;period&#x27;</span>,y:vg.avg(<span class="s">&#x27;value&#x27;</span>),fill:<span class="s">&#x27;cohort&#x27;</span>,r:<span class="n">2</span>}),vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>),vg.colorLegend(),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">68</span>),vg.yGrid(true),vg.xLabel(<span class="s">&#x27;period&#x27;</span>),vg.yLabel(<span class="s">&#x27;retained activity&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/quality-matrix-transparent.png" alt="Quality matrix" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">07 · matrix</div>
+          <h2>Quality matrix</h2>
+          <p class="blurb">Which phase and subsystem pairs accumulate quality risk?</p>
+          <div class="tags"><span class="tag">cell</span><span class="tag">matrix</span><span class="tag">risk</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;quality-matrix&#x27;</span>)view=vg.plot(vg.cell(source,{x:<span class="s">&#x27;cohort&#x27;</span>,y:<span class="s">&#x27;subsystem&#x27;</span>,fill:vg.avg(<span class="s">&#x27;value&#x27;</span>),inset:<span class="n">2</span>}),vg.colorScheme(<span class="s">&#x27;magma&#x27;</span>),vg.colorLegend(),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">90</span>),vg.xLabel(<span class="s">&#x27;lifecycle phase&#x27;</span>),vg.yLabel(<span class="s">&#x27;subsystem&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/rankings-transparent.png" alt="Rankings" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">08 · comparison</div>
+          <h2>Rankings</h2>
+          <p class="blurb">How do regional scores and uncertainty compare?</p>
+          <div class="tags"><span class="tag">dot</span><span class="tag">rank</span><span class="tag">comparison</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;rankings&#x27;</span>)view=vg.plot(vg.dot(source,{x:vg.avg(<span class="s">&#x27;value&#x27;</span>),y:<span class="s">&#x27;cohort&#x27;</span>,fill:<span class="s">&#x27;cohort&#x27;</span>,r:<span class="n">11</span>}),vg.ruleY([<span class="n">0</span>,<span class="n">1</span>,<span class="n">2</span>,<span class="n">3</span>,<span class="n">4</span>,<span class="n">5</span>,<span class="n">6</span>,<span class="n">7</span>],{y:(d:number)=&gt;d,stroke:<span class="s">&#x27;#52758c&#x27;</span>,strokeOpacity:.<span class="n">25</span>}),vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">90</span>),vg.xLabel(<span class="s">&#x27;mean score&#x27;</span>),vg.yLabel(<span class="s">&#x27;region rank&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/anomalies-transparent.png" alt="Anomalies" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">09 · events</div>
+          <h2>Anomalies</h2>
+          <p class="blurb">Where do rare spikes appear inside a dense signal?</p>
+          <div class="tags"><span class="tag">spike</span><span class="tag">anomaly</span><span class="tag">time</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;anomalies&#x27;</span>)view=vg.plot(vg.denseLine(source,{x:<span class="s">&#x27;i&#x27;</span>,y:<span class="s">&#x27;value&#x27;</span>}),vg.spike(source,{x:<span class="s">&#x27;i&#x27;</span>,y:<span class="s">&#x27;metric&#x27;</span>,stroke:<span class="s">&#x27;#ff6f91&#x27;</span>}),vg.panZoomX(),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">70</span>),vg.xLabel(<span class="s">&#x27;event index&#x27;</span>),vg.yLabel(<span class="s">&#x27;signal / anomaly&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/vector-field-transparent.png" alt="Vector field" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">10 · vector field</div>
+          <h2>Vector field</h2>
+          <p class="blurb">How does directional flow vary across a sampled grid?</p>
+          <div class="tags"><span class="tag">vector</span><span class="tag">field</span><span class="tag">grid</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;vector-field&#x27;</span>)view=vg.plot(vg.vector(source,{x:<span class="s">&#x27;period&#x27;</span>,y:<span class="s">&#x27;subsystem&#x27;</span>,rotate:<span class="s">&#x27;vx&#x27;</span>,length:<span class="s">&#x27;value&#x27;</span>,stroke:<span class="s">&#x27;cohort&#x27;</span>}),vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>),vg.width(wide.width),vg.height(wide.height),vg.marginLeft(<span class="n">70</span>),vg.xLabel(<span class="s">&#x27;phase&#x27;</span>),vg.yLabel(<span class="s">&#x27;field band&#x27;</span>));
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/small-multiples-transparent.png" alt="Small multiples" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">11 · faceted analysis</div>
+          <h2>Small multiples</h2>
+          <p class="blurb">How do the same metrics behave across four services?</p>
+          <div class="tags"><span class="tag">small-multiples</span><span class="tag">services</span><span class="tag">comparison</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else if(scene===<span class="s">&#x27;small-multiples&#x27;</span>){const views=Array.from({length:<span class="n">4</span>},(_,k)=&gt;vg.plot(vg.lineY(vg.from(<span class="s">&#x27;measures&#x27;</span>,{filter:`subsystem = ${k}`}),{x:<span class="s">&#x27;period&#x27;</span>,y:vg.avg(<span class="s">&#x27;value&#x27;</span>),stroke:`${[<span class="s">&#x27;#54d6c6&#x27;</span>,<span class="s">&#x27;#7b9cff&#x27;</span>,<span class="s">&#x27;#ff6f91&#x27;</span>,<span class="s">&#x27;#ffd166&#x27;</span>][k]}`}),vg.width(<span class="n">560</span>),vg.height(<span class="n">280</span>),vg.marginLeft(<span class="n">55</span>),vg.yGrid(true),vg.xLabel(`service ${k+<span class="n">1</span>}`)));view=vg.vconcat(vg.hconcat(views[<span class="n">0</span>],views[<span class="n">1</span>]),vg.hconcat(views[<span class="n">2</span>],views[<span class="n">3</span>]));}
+</code></pre></details>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="shot light"><img src="out/operations-transparent.png" alt="Operations" loading="lazy"></figure>
+        <div class="body">
+          <div class="idx">12 · analytical dashboard</div>
+          <h2>Operations</h2>
+          <p class="blurb">How do load, latency, errors, and queue depth align?</p>
+          <div class="tags"><span class="tag">dashboard</span><span class="tag">linked</span><span class="tag">operations</span><span class="tag">advanced</span></div>
+          <details><summary>src/main.ts</summary><pre><code>    else {const select=vg.Selection.crossfilter();view=vg.vconcat(vg.plot(vg.hexbin(source,{x:<span class="s">&#x27;period&#x27;</span>,y:<span class="s">&#x27;value&#x27;</span>,fill:vg.count(),binWidth:<span class="n">9</span>}),vg.intervalXY({as:select}),vg.colorScheme(<span class="s">&#x27;viridis&#x27;</span>),vg.width(<span class="n">1120</span>),vg.height(<span class="n">360</span>),vg.marginLeft(<span class="n">68</span>)),vg.plot(vg.barY(vg.from(<span class="s">&#x27;measures&#x27;</span>,{filterBy:select}),{x:<span class="s">&#x27;cohort&#x27;</span>,y:vg.count(),fill:<span class="s">&#x27;cohort&#x27;</span>}),vg.colorScheme(<span class="s">&#x27;turbo&#x27;</span>),vg.width(<span class="n">1120</span>),vg.height(<span class="n">240</span>),vg.marginLeft(<span class="n">68</span>),vg.yGrid(true)));}
+    chart.replaceChildren(view);
+  }
+
+  chart.addEventListener(<span class="s">&#x27;pointerup&#x27;</span>, () =&gt; {
+    runtime.interactions += <span class="n">1</span>;
+    status.textContent = `${runtime.interactions} interactions`;
+  });
+  status.textContent = `${meta.rows.toLocaleString()} rows ready`;
+  await new Promise(resolveFrame =&gt; requestAnimationFrame(() =&gt; requestAnimationFrame(resolveFrame)));
+  await new Promise(resolveWait =&gt; setTimeout(resolveWait, <span class="n">700</span>));
+  runtime.ready = true;
+}
+
+build().catch(error =&gt; {
+  runtime.error = error instanceof Error ? error.stack ?? error.message : String(error);
+  document.querySelector(<span class="s">&#x27;#chart&#x27;</span>)!.innerHTML = `&lt;pre class=<span class="s">&quot;error&quot;</span>&gt;${runtime.error}&lt;/pre&gt;`;
+  document.querySelector(<span class="s">&#x27;#status&#x27;</span>)!.textContent = <span class="s">&#x27;failed&#x27;</span>;
+  console.error(error);
+});
+</code></pre></details>
+        </div>
+      </article>
+  </main>
+  <footer>
+    Generated by <code>tools/gallery.py</code> — regenerate with <code>just gallery</code>
+    after <code>just build</code>. Images are referenced from
+    <code>out/</code>, so open this file straight from the checkout.
+  </footer>
+</div>
+</body>
+</html>
