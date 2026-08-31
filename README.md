@@ -1,4 +1,4 @@
-# mosaic-examples
+# mosaic-demos
 
 Database-backed plots built with Mosaic, vgplot, and a fully local DuckDB-WASM bundle. The primary output is twelve background-transparent PNGs; the browser views are an optional interactive companion.
 

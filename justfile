@@ -17,7 +17,7 @@ test: build
 
 # Browser demo repo — no binary, no launcher (ADR-749: nothing to install).
 install:
-    @echo "mosaic-examples: browser demos, nothing to install"
+    @echo "mosaic-demos: browser demos, nothing to install"
 
 # Re-render the captures without the full validate pass.
 render: build
